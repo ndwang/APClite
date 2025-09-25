@@ -1,6 +1,6 @@
 # APClite.jl
 
-A lightweight version of AtomicAndPhysicalConstants.jl that provides atomic and physical constants as plain Float64 values without Unitful dependencies.
+A lightweight version of AtomicAndPhysicalConstants.jl that provides atomic and physical constants as plain Float64 values in fixed units.
 
 ## Features
 
@@ -9,6 +9,16 @@ A lightweight version of AtomicAndPhysicalConstants.jl that provides atomic and 
 - **Fast compilation**: Simple static constants for optimal performance
 - **Simple API**: Easy-to-use Species struct with direct field access
 - **Comprehensive coverage**: Subatomic particles, atoms, ions, and isotopes
+
+## Comparison with AtomicAndPhysicalConstants.jl
+
+| Feature | APClite | AtomicAndPhysicalConstants |
+|---------|---------|----------------------------|
+| Dependencies | None | Unitful, DynamicQuantities, etc. |
+| Performance | Fast | Slower |
+| Units | Plain Float64 | Unitful quantities |
+| Data sources | CODATA 2022 only | Multiple years available |
+| API | Direct field access | Macro-based API |
 
 ## Installation
 
@@ -178,14 +188,3 @@ APClite.ATOMIC_SPECIES["Xe"] = (
 xe129pp = Species("Xe129++")
 println(xe129pp)
 ```
-
-## Comparison with AtomicAndPhysicalConstants.jl
-
-| Feature | APClite | AtomicAndPhysicalConstants |
-|---------|---------|----------------------------|
-| Dependencies | None | Unitful, DynamicQuantities, etc. |
-| Compilation | Fast | Slower due to macros |
-| Units | Plain Float64 | Unitful quantities |
-| Macros | None | @APCdef required |
-| Data sources | CODATA 2022 only | Multiple years available |
-| API | Direct field access | Macro-based API |
