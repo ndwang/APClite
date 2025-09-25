@@ -8,41 +8,6 @@ All constants are stored as plain Float64.
 const RELEASE_YEAR = 2022
 
 #####################################################################
-#  Fundamental constants
-#####################################################################
-
-# Speed of light in vacuum [m/s]
-const C_LIGHT = 2.99792458e8
-
-# Planck constant [J⋅s]
-const H_PLANCK = 6.62607015e-34
-
-# Reduced Planck constant [J⋅s]
-const H_BAR = H_PLANCK / (2π)
-
-# Elementary charge [C]
-const E_CHARGE = 1.602176634e-19
-
-# Fine structure constant (dimensionless)
-const FINE_STRUCTURE = 0.0072973525643
-
-# Avogadro constant [mol⁻¹]
-const AVOGADRO = 6.02214076e23
-
-# Classical electron radius [m]
-const R_ELECTRON = 2.8179403205e-15
-
-# Classical proton radius [m]
-const R_PROTON = R_ELECTRON * M_ELECTRON / M_PROTON
-
-# Permittivity of free space [F/m]
-const EPS_0 = 8.8541878128e-12
-
-# Permeability of free space [N/A²]
-const MU_0 = 1.25663706212e-6
-
-
-#####################################################################
 #  Mass constants
 #####################################################################
 
@@ -125,6 +90,40 @@ const G_HELION = -4.2552506995
 
 # Triton g-factor
 const G_TRITON = 5.957924930
+
+#####################################################################
+#  Fundamental constants
+#####################################################################
+
+# Speed of light in vacuum [m/s]
+const C_LIGHT = 2.99792458e8
+
+# Planck constant [J⋅s]
+const H_PLANCK = 6.62607015e-34
+
+# Reduced Planck constant [J⋅s]
+const H_BAR = H_PLANCK / (2π)
+
+# Elementary charge [C]
+const E_CHARGE = 1.602176634e-19
+
+# Fine structure constant (dimensionless)
+const FINE_STRUCTURE = 0.0072973525643
+
+# Avogadro constant [mol⁻¹]
+const AVOGADRO = 6.02214076e23
+
+# Classical electron radius [m]
+const R_ELECTRON = 2.8179403205e-15
+
+# Classical proton radius [m]
+const R_PROTON = R_ELECTRON * M_ELECTRON / M_PROTON
+
+# Permittivity of free space [F/m]
+const EPS_0 = 8.8541878128e-12
+
+# Permeability of free space [N/A²]
+const MU_0 = 1.25663706212e-6
 
 #####################################################################
 #  Unit conversions
