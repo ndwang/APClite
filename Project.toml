@@ -1,0 +1,15 @@
+name = "APClite"
+uuid = "12345678-1234-5678-9012-123456789012"
+authors = ["Ningdong Wang <nw285@cornell.edu>"]
+version = "0.1.0"
+
+[deps]
+
+[compat]
+julia = "1.11"
+
+[extras]
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[targets]
+test = ["Test"]
