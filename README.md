@@ -14,7 +14,7 @@ A lightweight version of AtomicAndPhysicalConstants.jl that provides atomic and 
 
 ```julia
 julia> using Pkg
-julia> Pkg.add("APClite")
+julia> Pkg.add(url="https://github.com/ndwang/APClite")
 ```
 
 ## Quick Start
