@@ -104,19 +104,5 @@ println("  Magnetic moment: ", proton.moment, " J/T")
 println("  Kind: ", proton.kind)
 println()
 
-# 8. Compare masses
-println("8. Mass Comparisons:")
-println("Electron mass: ", electron.mass, " MeV/c²")
-println("Proton mass: ", proton.mass, " MeV/c²")
-println("Proton/electron mass ratio: ", proton.mass / electron.mass)
-println()
-
-# 9. Unit conversions
-println("9. Unit Conversions:")
-println("Electron mass in kg: ", electron.mass * 1.783e-30, " kg")
-println("Proton mass in kg: ", proton.mass * 1.783e-30, " kg")
-println("Speed of light in km/s: ", C_LIGHT / 1000, " km/s")
-println()
-
 println("=== End of Examples ===")
 
