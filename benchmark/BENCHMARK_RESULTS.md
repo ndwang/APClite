@@ -13,18 +13,19 @@ This document contains comprehensive performance benchmarks for APClite.jl, a li
 
 ## Performance Summary
 
-| Operation | Time | Memory |
-|-----------|------|--------|
-| **Constants Access** | ~0.001 μs | N/A |
-| **Species Creation** | 0.3-0.7 μs | 300-500 bytes |
-| **Property Access** | ~0.6 μs | N/A |
-| **Bulk Operations** | ~8.0 μs | ~490 bytes/species |
+| Operation            | Time       | Memory             |
+| -------------------- | ---------- | ------------------ |
+| **Constants Access** | ~0.001 μs  | N/A                |
+| **Species Creation** | 0.3-0.7 μs | 300-500 bytes      |
+| **Property Access**  | ~0.6 μs    | N/A                |
+| **Bulk Operations**  | ~8.0 μs    | ~490 bytes/species |
 
 ## Detailed Results
 
 ### 1. Physical Constants Access
 
 **Individual Constant Access Times:**
+
 ```
 C_LIGHT: 0.0019 μs
 H_PLANCK: 0.0016 μs
@@ -39,12 +40,14 @@ RYDBERG: 0.0015 μs
 ```
 
 **Bulk Constants Access:**
+
 - **10 constants**: 0.001 μs total
 - **Overhead vs hardcoded**: 1.25x (negligible)
 
 ### 2. Species Creation Performance
 
 **Subatomic Particles:**
+
 ```
 Species("electron"): 0.267 μs
 Species("proton"): 0.314 μs
@@ -54,6 +57,7 @@ Species("photon"): 0.317 μs
 ```
 
 **Atomic Species:**
+
 ```
 Species("H"): 0.442 μs
 Species("He"): 0.464 μs
@@ -64,6 +68,7 @@ Species("U"): 0.436 μs
 ```
 
 **Ions and Isotopes:**
+
 ```
 Species("H+"): 0.683 μs
 Species("He++"): 0.624 μs
@@ -79,6 +84,7 @@ Species("U238"): 0.464 μs
 ### 3. Property Access Performance
 
 **By Species Type:**
+
 - **Subatomic particle (electron)**: 0.012 μs
 - **Atomic species (H)**: 0.064 μs
 - **Ion (H+)**: 0.099 μs
@@ -86,6 +92,7 @@ Species("U238"): 0.464 μs
 ### 4. Scaling Performance
 
 **Creating N Species:**
+
 ```
 1 species: 0.306 μs per species
 10 species: 0.324 μs per species
@@ -94,6 +101,7 @@ Species("U238"): 0.464 μs
 ```
 
 **Memory Usage Scaling:**
+
 ```
 100 species: 462.88 bytes per species
 1000 species: 490.26 bytes per species
@@ -113,6 +121,7 @@ C12: 288.0 bytes
 ## Comparison with Baselines
 
 ### vs Simple Struct Creation
+
 - **APClite Species("electron")**: 0.293 μs
 - **SimpleParticle("electron", 0.511, -1.0)**: 0.002 μs
 - **Overhead**: 154.02x
@@ -122,6 +131,7 @@ C12: 288.0 bytes
 - **Overhead**: 9.12x
 
 ### vs Hardcoded Values
+
 - **APClite constants**: 0.0008 μs
 - **Hardcoded values**: 0.0009 μs
 - **Overhead**: ~1.0x (negligible)
@@ -129,11 +139,13 @@ C12: 288.0 bytes
 ## Benchmark Scripts
 
 The following benchmark scripts are available in the `benchmark/` directory:
+
 - `performance_test.jl`: Basic performance tests
 - `detailed_benchmark.jl`: Detailed analysis with individual timings
 - `comparison_benchmark.jl`: Comparison with baseline implementations
 
 To run the benchmarks:
+
 ```julia
 julia --project=. benchmark/performance_test.jl
 julia --project=. benchmark/detailed_benchmark.jl
