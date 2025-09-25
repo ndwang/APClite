@@ -29,7 +29,6 @@ function init_species_data!()
         "pion-" => (charge=-1.0, mass=M_PION_CHARGED, spin=0.0, moment=0.0, kind=HADRON),
         "deuteron" => (charge=1.0, mass=M_DEUTERON, spin=1.0, moment=MU_DEUTERON, kind=HADRON),
         "anti-deuteron" => (charge=-1.0, mass=M_DEUTERON, spin=1.0, moment=MU_DEUTERON, kind=HADRON),
-        "helion" => (charge=2.0, mass=M_HELION, spin=0.5, moment=MU_HELION, kind=HADRON),
         "photon" => (charge=0.0, mass=0.0, spin=1.0, moment=0.0, kind=PHOTON),
     ))
 
