@@ -79,11 +79,8 @@ All constants are available as module-level constants, grouped by type:
   - `E_CHARGE`: Elementary charge [C]
   - `FINE_STRUCTURE`: Fine structure constant (dimensionless)
   - `AVOGADRO`: Avogadro constant [mol⁻¹]
-  - `K_BOLTZMANN`: Boltzmann constant [J/K]
-  - `G_NEWTON`: Gravitational constant [m³/(kg⋅s²)]
-  - `BOHR_RADIUS`: Bohr radius [m]
-  - `RYDBERG`: Rydberg constant [m⁻¹]
   - `R_ELECTRON`: Classical electron radius [m]
+  - `R_PROTON`: Classical proton radius [m]
   - `EPS_0`: Permittivity of free space [F/m]
   - `MU_0`: Permeability of free space [N/A²]
 
@@ -104,6 +101,7 @@ All constants are available as module-level constants, grouped by type:
   - `MU_MUON`: Muon
   - `MU_DEUTERON`: Deuteron
   - `MU_HELION`: Helion
+  - `MU_TRITON`: Triton
 
 - g-factors (dimensionless)
   - `G_ELECTRON`: Electron
@@ -112,6 +110,11 @@ All constants are available as module-level constants, grouped by type:
   - `G_MUON`: Muon
   - `G_DEUTERON`: Deuteron
   - `G_HELION`: Helion
+  - `G_TRITON`: Triton
+
+- Magnetic moment anomalies (dimensionless)
+  - `ANOMALY_ELECTRON`: Electron
+  - `ANOMALY_MUON`: Muon
 
 - Unit conversions
   - `KG_PER_AMU`: Kilograms per atomic mass unit [kg/amu]
