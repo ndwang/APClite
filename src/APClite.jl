@@ -21,9 +21,6 @@ include("constructors.jl")
 include("functions.jl")
 include("species_data.jl")
 
-# Initialize species data
-init_species_data!()
-
 # Export main types and functions
 export Species
 export Kind, ATOM, HADRON, LEPTON, PHOTON, NULL

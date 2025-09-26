@@ -78,7 +78,7 @@ function Species(name::String)
     try
         return parse_atomic_species(name)
     catch
-        error("Species '$name' not found in subatomic or atomic species database")
+        error("Species '$name' not found in subatomic or atomic species database: $e")
     end
 end
 
@@ -88,114 +88,138 @@ end
 Parse atomic species from string format like "H", "H+", "C12", "U235++", etc.
 """
 function parse_atomic_species(name::String)
-    # Check for anti-atoms
-    is_anti = occursin(ANTI_REGEX, name)
-    if is_anti
-        clean_name = replace(name, ANTI_REGEX => "")
-    else
-        clean_name = name
-    end
+    # Define regex patterns (matching AtomicAndPhysicalConstants)
+    rgas = r"[A-Z][a-z]|[A-Z]" # atomic symbol regex
+    rgm = r"#[0-9][0-9][0-9]|#[0-9][0-9]|#[0-9]" # atomic mass regex with # prefix
+    rgm_no_hash = r"[0-9][0-9][0-9]|[0-9][0-9]|[0-9]" # atomic mass regex without # prefix
+    rgcp = r"\+[0-9][0-9][0-9]|\+[0-9][0-9]|\+[0-9]|\+\+|\+" # positive charge regex
+    rgcm = r"\-[0-9][0-9][0-9]|\-[0-9][0-9]|\-[0-9]|\-\-|\-" # negative charge regex
     
-    # Extract element symbol, isotope number, and charge
-    element, isotope, charge = parse_atomic_string(clean_name)
-    
-    # Get atomic data
-    if !haskey(ATOMIC_SPECIES, element)
-        error("Element $element not found in atomic species database")
-    end
-    
-    atom_data = ATOMIC_SPECIES[element]
-    
-    # Get mass for the isotope
-    if isotope == 0
-        mass = get_most_abundant_mass(element)
-    else
-        mass = get_atomic_mass(element, isotope)
-    end
-    
-    # Adjust mass for charge (add/remove electron masses)
-    if charge > 0
-        # Positive ion: remove electron masses
-        mass -= charge * M_ELECTRON
-    elseif charge < 0
-        # Negative ion: add electron masses
-        mass += abs(charge) * M_ELECTRON
-    end
-    
-    # Calculate spin (rough approximation)
-    if isotope == 0
-        # Use most abundant isotope
-        isotope = Int(round(mass / 931.5))  # Rough conversion from MeV to mass number
-    end
-    
-    spin = isotope % 2 == 0 ? 0.0 : 0.5  # Even mass number: integer spin, odd: half-integer
-    
-    # Create final name
-    final_name = is_anti ? "anti-$name" : name
-    
-    return Species(
-        final_name,
-        Float64(charge),
-        mass,
-        spin,
-        0.0,  # Magnetic moment not calculated for atoms
-        Float64(isotope),
-        ATOM
-    )
-end
-
-"""
-    parse_atomic_string(name::String)
-
-Parse atomic string into element, isotope number, and charge.
-
-# Examples
-- "H" -> ("H", 0, 0)
-- "H+" -> ("H", 0, 1) 
-- "C12" -> ("C", 12, 0)
-- "U235++" -> ("U", 235, 2)
-- "O-" -> ("O", 0, -1)
-"""
-function parse_atomic_string(name::String)
-    # Find the element symbol (1-2 characters at the start)
-    element = ""
-    isotope = 0
+    anti_atom::Bool = false
     charge = 0
+    iso = -1
     
-    # Find element symbol
-    if length(name) >= 2 && islowercase(name[2])
-        element = name[1:2]  # Two-letter symbol
-        remaining = name[3:end]
-    else
-        element = name[1:1]  # One-letter symbol
-        remaining = name[2:end]
+    # Handle anti-atoms
+    if occursin(ANTI_REGEX, name)
+        name = replace(name, ANTI_REGEX => "")
+        anti_atom = true
     end
     
-    # Parse remaining string for isotope and charge
-    if remaining == ""
-        return (element, isotope, charge)
+    # Extract atomic symbol
+    AS = match(rgas, name)
+    if AS === nothing
+        error("The specified particle name does not exist in this library.")
     end
     
-    # Find charge symbols
-    plus_count = count(==('+'), remaining)
-    minus_count = count(==('-'), remaining)
-    
-    if plus_count > 0 && minus_count > 0
-        error("Cannot have both positive and negative charges in $name")
-    end
-    
-    if plus_count > 0
-        charge = plus_count
-        remaining = replace(remaining, "+" => "")
-    elseif minus_count > 0
-        charge = -minus_count
-        remaining = replace(remaining, "-" => "")
-    end
+    symbol = AS.match
+    name = replace(name, symbol => "") # strip atomic symbol from the entered text
     
     # Parse isotope number
-    if remaining != ""
-        isotope = parse(Int, remaining)
+    isom = match(rgm, name)
+    if isom !== nothing
+        isostr = strip(isom.match, '#')
+        iso = tryparse(Int, isostr)
+        if iso === nothing
+            error("Invalid isotope number format")
+        end
+        name = replace(name, isom.match => "")
+    else
+        # Try without # prefix
+        isom = match(rgm_no_hash, name)
+        if isom !== nothing
+            isostr = isom.match
+            iso = tryparse(Int, isostr)
+            if iso === nothing
+                error("Invalid isotope number format")
+            end
+            name = replace(name, isom.match => "")
+        end
     end
     
-    return (element, isotope, charge)
+    # Parse charge
+    if count('+', name) != 0 && count('-', name) != 0
+        error("You made a typo in \"$name\". You have both + and - in the name.")
+    elseif occursin(rgcp, name)
+        chstr = match(rgcp, name).match
+        if chstr == "+"
+            charge = 1
+        elseif chstr == "++"
+            charge = 2
+        else
+            charge = tryparse(Int, chstr)
+            if charge === nothing
+                error("Invalid charge format")
+            end
+        end
+        name = replace(name, chstr => "")
+    elseif occursin(rgcm, name)
+        chstr = match(rgcm, name).match
+        if chstr == "-"
+            charge = -1
+        elseif chstr == "--"
+            charge = -2
+        else
+            charge = tryparse(Int, chstr)
+            if charge === nothing
+                error("Invalid charge format")
+            end
+        end
+        name = replace(name, chstr => "")
+    end
+    
+    # Check for remaining characters
+    if name != ""
+        error("You have entered too many characters: please try again.")
+    end
+    
+    # Check if element exists in atomic species database
+    if !haskey(ATOMIC_SPECIES, AS)
+        error("Element $AS not found in atomic species database")
+    end
+    
+    atom_data = ATOMIC_SPECIES[AS]
+    
+    # Error handling for isotope availability
+    if iso != -1 && iso ∉ keys(atom_data.mass)
+        error("The isotope you specified is not available.")
+    end
+    
+    # Error handling for charge limits
+    if charge > atom_data.Z
+        error("You have specified a larger positive charge than the fully stripped $AS atom has, which is unphysical.")
+    end
+    
+    # Calculate mass
+    mass = begin
+        if anti_atom == false
+            nmass = atom_data.mass[iso] * EV_PER_AMU / 1e6
+            # Mass of the positively charged isotope in MeV/c²
+            nmass + M_ELECTRON * (atom_data.Z - charge)
+            # Remove the electrons
+        else
+            nmass = atom_data.mass[iso] * EV_PER_AMU / 1e6
+            # Mass of the positively charged isotope in MeV/c²
+            nmass + M_ELECTRON * (-atom_data.Z + charge)
+            # Remove the positrons
+        end
+    end
+    
+    # Calculate spin
+    if iso == -1 # if it's the average, make an educated guess at the spin
+        partonum = round(atom_data.mass[iso])
+        if anti_atom == false
+            spin = 0.5 * (partonum + (atom_data.Z - charge))
+        else
+            spin = 0.5 * (partonum + (atom_data.Z + charge))
+        end
+    else # otherwise, use the sum of proton and neutron spins
+        spin = 0.5 * iso
+    end
+    
+    # Return the object
+    if anti_atom == false
+        return Species(AS, Float64(charge), mass, spin, 0.0, Float64(iso), ATOM)
+    else
+        return Species("anti-" * AS, Float64(charge), mass, spin, 0.0, Float64(iso), ATOM)
+    end
 end
