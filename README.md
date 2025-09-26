@@ -185,7 +185,6 @@ println(xminus)
 # 3) Register a custom atomic element (with isotopes) for name/ion/isotope parsing
 APClite.ATOMIC_SPECIES["Xe"] = (
     Z=54,
-    mass=121000.0,  # nominal neutral-atom mass [MeV/c^2]
     isotopes=Dict(129 => 120000.0, 132 => 122000.0, -1 => 121000.0),
 )
 xe129pp = Species("Xe129++")

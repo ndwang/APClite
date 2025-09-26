@@ -36,3 +36,72 @@ end
 
 # Default constructor for null species
 Species() = Species("Null", 0.0, 0.0, 0.0, 0.0, 0.0, NULL)
+
+"""
+    nameof(species::Species; basename::Bool=false) -> String
+
+Get the name of the species. For atomic species, includes isotope and charge information unless basename=true.
+"""
+function Base.nameof(species::Species; basename::Bool=false)::String
+    if species.kind == NULL
+        return "Null"
+    end
+    
+    bname = species.name
+    
+    # Full name for atoms
+    if basename == false && species.kind == ATOM
+        isostr = ""
+        iso = Int(species.iso)
+        chstr = ""
+        ch = Int(species.charge)
+        if iso != -1
+            isostr = "#" * string(iso)
+        end
+        if ch > 0
+            chstr = "+" * string(ch)
+        elseif ch < 0
+            chstr = string(ch)
+        end
+        return isostr * bname * chstr
+    end
+
+    # Default basename
+    return bname
+end
+
+ 
+
+"""
+    show(io::IO, species::Species)
+
+Display a Species object in a readable format.
+"""
+function Base.show(io::IO, species::Species)
+    if species.kind == NULL
+        print(io, "Species(Null)")
+    else
+        print(io, "Species($(nameof(species))), charge=$(species.charge)e, mass=$(species.mass) MeV/c², spin=$(species.spin)ħ)")
+    end
+end
+
+"""
+    show(io::IO, ::MIME"text/plain", species::Species)
+
+Display a Species object in a detailed format.
+"""
+function Base.show(io::IO, ::MIME"text/plain", species::Species)
+    if species.kind == NULL
+        print(io, "Species(Null)")
+    else
+        println(io, "Species: $(nameof(species))")
+        println(io, "  Charge: $(species.charge) e")
+        println(io, "  Mass: $(species.mass) MeV/c²")
+        println(io, "  Spin: $(species.spin) ħ")
+        println(io, "  Magnetic moment: $(species.moment) J/T")
+        if species.iso > 0
+            println(io, "  Mass number: $(Int(species.iso))")
+        end
+        println(io, "  Kind: $(species.kind)")
+    end
+end

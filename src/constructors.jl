@@ -77,7 +77,7 @@ function Species(name::String)
     # Try to parse as atomic species, but catch errors
     try
         return parse_atomic_species(name)
-    catch
+    catch e
         error("Species '$name' not found in subatomic or atomic species database: $e")
     end
 end
@@ -173,11 +173,11 @@ function parse_atomic_species(name::String)
     end
     
     # Check if element exists in atomic species database
-    if !haskey(ATOMIC_SPECIES, AS)
-        error("Element $AS not found in atomic species database")
+    if !haskey(ATOMIC_SPECIES, symbol)
+        error("Element $symbol not found in atomic species database")
     end
     
-    atom_data = ATOMIC_SPECIES[AS]
+    atom_data = ATOMIC_SPECIES[symbol]
     
     # Error handling for isotope availability
     if iso != -1 && iso ∉ keys(atom_data.mass)
@@ -186,7 +186,7 @@ function parse_atomic_species(name::String)
     
     # Error handling for charge limits
     if charge > atom_data.Z
-        error("You have specified a larger positive charge than the fully stripped $AS atom has, which is unphysical.")
+        error("You have specified a larger positive charge than the fully stripped $symbol atom has, which is unphysical.")
     end
     
     # Calculate mass
@@ -218,8 +218,8 @@ function parse_atomic_species(name::String)
     
     # Return the object
     if anti_atom == false
-        return Species(AS, Float64(charge), mass, spin, 0.0, Float64(iso), ATOM)
+        return Species(symbol, Float64(charge), mass, spin, 0.0, Float64(iso), ATOM)
     else
-        return Species("anti-" * AS, Float64(charge), mass, spin, 0.0, Float64(iso), ATOM)
+        return Species("anti-" * symbol, Float64(charge), mass, spin, 0.0, Float64(iso), ATOM)
     end
 end
