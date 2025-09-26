@@ -12,16 +12,15 @@ const_benchmark = @benchmark begin
     c = C_LIGHT
     h = H_PLANCK
     e = E_CHARGE
-    me = M_ELECTRON
-    mp = M_PROTON
-    mn = M_NEUTRON
     fs = FINE_STRUCTURE
     av = AVOGADRO
-    br = BOHR_RADIUS
-    ry = RYDBERG
+    re = R_ELECTRON
+    rp = R_PROTON
+    eps = EPS_0
+    mu0 = MU_0
 end
 
-println("   Constants access time: $(round(median(const_benchmark.times) / 1000, digits=3)) μs")
+println("   Constants access time: $(round(minimum(const_benchmark.times) / 1000, digits=3)) μs")
 println()
 
 # Test 2: Creating subatomic particles
@@ -40,7 +39,7 @@ subatomic_benchmark = @benchmark begin
     photon = Species("photon")
 end
 
-println("   Subatomic particle creation time: $(round(median(subatomic_benchmark.times) / 1000, digits=3)) μs")
+println("   Subatomic particle creation time: $(round(minimum(subatomic_benchmark.times) / 1000, digits=3)) μs")
 println()
 
 # Test 3: Creating atomic species
@@ -56,7 +55,7 @@ atomic_benchmark = @benchmark begin
     u = Species("U")
 end
 
-println("   Atomic species creation time: $(round(median(atomic_benchmark.times) / 1000, digits=3)) μs")
+println("   Atomic species creation time: $(round(minimum(atomic_benchmark.times) / 1000, digits=3)) μs")
 println()
 
 # Test 4: Creating ions and isotopes
@@ -75,7 +74,7 @@ ion_benchmark = @benchmark begin
     u238 = Species("U238")
 end
 
-println("   Ions and isotopes creation time: $(round(median(ion_benchmark.times) / 1000, digits=3)) μs")
+println("   Ions and isotopes creation time: $(round(minimum(ion_benchmark.times) / 1000, digits=3)) μs")
 println()
 
 # Test 5: Accessing species properties
@@ -87,27 +86,24 @@ p = Species("proton")
 h = Species("H")
 
 property_benchmark = @benchmark begin
-    name_e = nameof(e)
-    charge_e = e.charge
-    mass_e = e.mass
-    spin_e = e.spin
-    kind_e = e.kind
+    charge_e = $e.charge
+    mass_e = $e.mass
+    spin_e = $e.spin
+    kind_e = $e.kind
     
-    name_p = nameof(p)
-    charge_p = p.charge
-    mass_p = p.mass
-    spin_p = p.spin
-    kind_p = p.kind
+    charge_p = $p.charge
+    mass_p = $p.mass
+    spin_p = $p.spin
+    kind_p = $p.kind
     
-    name_h = nameof(h)
-    charge_h = h.charge
-    mass_h = h.mass
-    spin_h = h.spin
-    kind_h = h.kind
-    iso_h = h.iso
+    charge_h = $h.charge
+    mass_h = $h.mass
+    spin_h = $h.spin
+    kind_h = $h.kind
+    iso_h = $h.iso
 end
 
-println("   Property access time: $(round(median(property_benchmark.times) / 1000, digits=3)) μs")
+println("   Property access time: $(round(minimum(property_benchmark.times) / 1000, digits=3)) μs")
 println()
 
 # Test 6: Bulk operations
@@ -125,15 +121,14 @@ bulk_benchmark = @benchmark begin
     
     # Access all properties
     for p in particles
-        nameof(p)
-        p.charge
-        p.mass
-        p.spin
-        p.kind
+        $p.charge
+        $p.mass
+        $p.spin
+        $p.kind
     end
 end
 
-println("   Bulk operations time: $(round(median(bulk_benchmark.times) / 1000, digits=3)) μs")
+println("   Bulk operations time: $(round(minimum(bulk_benchmark.times) / 1000, digits=3)) μs")
 println()
 
 # Test 7: Memory usage
@@ -148,15 +143,15 @@ memory_benchmark = @benchmark begin
     particles
 end
 
-println("   Memory allocation for 1000 electrons: $(round(median(memory_benchmark.memory) / 1024, digits=2)) KB")
+println("   Memory allocation for 1000 electrons: $(round(minimum(memory_benchmark.memory) / 1024, digits=2)) KB")
 println()
 
 # Test 8: Comparison with direct field access (if we had it)
 println("8. Performance Summary:")
-println("   - Constants access: $(round(median(const_benchmark.times) / 1000, digits=3)) μs")
-println("   - Subatomic creation: $(round(median(subatomic_benchmark.times) / 1000, digits=3)) μs")
-println("   - Atomic creation: $(round(median(atomic_benchmark.times) / 1000, digits=3)) μs")
-println("   - Ion/isotope creation: $(round(median(ion_benchmark.times) / 1000, digits=3)) μs")
-println("   - Property access: $(round(median(property_benchmark.times) / 1000, digits=3)) μs")
-println("   - Bulk operations: $(round(median(bulk_benchmark.times) / 1000, digits=3)) μs")
+println("   - Constants access: $(round(minimum(const_benchmark.times) / 1000000, digits=3)) ns")
+println("   - Subatomic creation: $(round(minimum(subatomic_benchmark.times) / 1000, digits=3)) μs")
+println("   - Atomic creation: $(round(minimum(atomic_benchmark.times) / 1000, digits=3)) μs")
+println("   - Ion/isotope creation: $(round(minimum(ion_benchmark.times) / 1000, digits=3)) μs")
+println("   - Property access: $(round(minimum(property_benchmark.times) / 1000, digits=3)) μs")
+println("   - Bulk operations: $(round(minimum(bulk_benchmark.times) / 1000, digits=3)) μs")
 println()

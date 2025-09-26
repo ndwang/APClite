@@ -15,13 +15,15 @@ constants = [
     ("M_NEUTRON", M_NEUTRON),
     ("FINE_STRUCTURE", FINE_STRUCTURE),
     ("AVOGADRO", AVOGADRO),
-    ("BOHR_RADIUS", BOHR_RADIUS),
-    ("RYDBERG", RYDBERG)
+    ("R_ELECTRON", R_ELECTRON),
+    ("R_PROTON", R_PROTON),
+    ("EPS_0", EPS_0),
+    ("MU_0", MU_0)
 ]
 
 for (name, value) in constants
     b = @benchmark $value
-    println("   $name: $(round(median(b.times) / 1000, digits=4)) μs")
+    println("   $name: $(round(minimum(b.times) / 1000, digits=4)) μs")
 end
 println()
 
@@ -36,7 +38,7 @@ species_names = [
 
 for name in species_names
     b = @benchmark Species($name)
-    println("   Species(\"$name\"): $(round(median(b.times) / 1000, digits=3)) μs")
+    println("   Species(\"$name\"): $(round(minimum(b.times) / 1000, digits=3)) μs")
 end
 println()
 
@@ -52,7 +54,7 @@ subatomic_props = @benchmark begin
     $e.spin
     $e.kind
 end
-println("   Subatomic particle (electron): $(round(median(subatomic_props.times) / 1000, digits=3)) μs")
+println("   Subatomic particle (electron): $(round(minimum(subatomic_props.times) / 1000, digits=3)) μs")
 
 # Atomic species
 h = Species("H")
@@ -64,7 +66,7 @@ atomic_props = @benchmark begin
     $h.kind
     $h.iso
 end
-println("   Atomic species (H): $(round(median(atomic_props.times) / 1000, digits=3)) μs")
+println("   Atomic species (H): $(round(minimum(atomic_props.times) / 1000, digits=3)) μs")
 
 # Ion
 h_plus = Species("H+")
@@ -76,7 +78,7 @@ ion_props = @benchmark begin
     $h_plus.kind
     $h_plus.iso
 end
-println("   Ion (H+): $(round(median(ion_props.times) / 1000, digits=3)) μs")
+println("   Ion (H+): $(round(minimum(ion_props.times) / 1000, digits=3)) μs")
 println()
 
 # Test scaling with number of species
@@ -89,7 +91,7 @@ for n in [1, 10, 100, 1000]
         end
         particles
     end
-    per_species = median(b.times) / n / 1000
+    per_species = minimum(b.times) / n / 1000
     println("   $n species: $(round(per_species, digits=3)) μs per species")
 end
 println()
@@ -104,7 +106,7 @@ for n in [100, 1000, 10000]
         end
         particles
     end
-    memory_per_species = median(b.memory) / n
+    memory_per_species = minimum(b.memory) / n
     println("   $n species: $(round(memory_per_species, digits=2)) bytes per species")
 end
 println()
@@ -121,7 +123,7 @@ species_types = [
 
 for (name, species) in species_types
     b = @benchmark Species($name)
-    println("   $name: $(round(median(b.memory), digits=0)) bytes")
+    println("   $name: $(round(minimum(b.memory), digits=0)) bytes")
 end
 println()
 
