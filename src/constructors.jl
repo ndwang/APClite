@@ -54,7 +54,7 @@ function Species(name::String)
         if haskey(G_FACTOR_MAP, clean_name)
             g_factor = G_FACTOR_MAP[clean_name]
         else
-            g_factor = g_spin(pd.mass, pd.moment, pd.spin, pd.charge; signed=true)
+            g_factor = 0.0
         end
         return Species(
             name,
@@ -230,15 +230,15 @@ function parse_atomic_species(name::String)
     # Calculate mass
     mass = begin
         if anti_atom == false
-            nmass = atom_data.mass[iso] * EV_PER_AMU / 1e6
             # Mass of the positively charged isotope in MeV/c²
-            nmass + M_ELECTRON * (atom_data.Z - charge)
+            nmass = atom_data.mass[iso] * EV_PER_AMU / 1e6
             # Remove the electrons
+            nmass - M_ELECTRON * charge
         else
-            nmass = atom_data.mass[iso] * EV_PER_AMU / 1e6
             # Mass of the positively charged isotope in MeV/c²
-            nmass + M_ELECTRON * (-atom_data.Z + charge)
+            nmass = atom_data.mass[iso] * EV_PER_AMU / 1e6
             # Remove the positrons
+            nmass + M_ELECTRON * charge
         end
     end
     
@@ -256,11 +256,11 @@ function parse_atomic_species(name::String)
     
     # Calculate g-factor
     if symbol == "He" && iso == 3 && charge == 2
-        g_factor = G_FACTOR_MAP["helion"]
+        g_factor = G_FACTOR_MAP["helion"] * M_HELION / (2 * M_PROTON)
     elseif symbol == "H" && iso == 3 && charge == 1
-        g_factor = G_FACTOR_MAP["triton"]
+        g_factor = G_FACTOR_MAP["triton"] * M_TRITON / M_PROTON
     elseif symbol == "H" && iso == 2 && charge == 1
-        g_factor = G_FACTOR_MAP["deuteron"]
+        g_factor = G_FACTOR_MAP["deuteron"] * M_DEUTERON / M_PROTON
     else
         g_factor = 0.0
     end

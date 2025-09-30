@@ -6,10 +6,10 @@ This module contains dictionaries with particle data using the latest CODATA 202
 
 # Dictionary mapping particle names to their g-factors
 const G_FACTOR_MAP = Dict{String,Float64}(
-    "electron"  => G_ELECTRON,
+    "electron"  => -G_ELECTRON,
     "proton"    => G_PROTON,
     "neutron"   => G_NEUTRON,
-    "muon"      => G_MUON,
+    "muon"      => -G_MUON,
     "deuteron"  => G_DEUTERON,
     "helion"    => G_HELION,
     "triton"    => G_TRITON,
@@ -24,16 +24,11 @@ const SUBATOMIC_SPECIES = Dict{String, NamedTuple}(
     "electron"        => (charge=-1.0, mass=M_ELECTRON,        spin=0.5, moment=MU_ELECTRON,        kind=LEPTON),
     "positron"        => (charge= 1.0, mass=M_ELECTRON,        spin=0.5, moment=MU_ELECTRON,        kind=LEPTON),
     "proton"          => (charge= 1.0, mass=M_PROTON,          spin=0.5, moment=MU_PROTON,          kind=HADRON),
-    "anti-proton"     => (charge=-1.0, mass=M_PROTON,          spin=0.5, moment=MU_PROTON,          kind=HADRON),
     "neutron"         => (charge= 0.0, mass=M_NEUTRON,         spin=0.5, moment=MU_NEUTRON,         kind=HADRON),
-    "anti-neutron"    => (charge= 0.0, mass=M_NEUTRON,         spin=0.5, moment=MU_NEUTRON,         kind=HADRON),
     "muon"            => (charge=-1.0, mass=M_MUON,            spin=0.5, moment=MU_MUON,            kind=LEPTON),
-    "anti-muon"       => (charge= 1.0, mass=M_MUON,            spin=0.5, moment=MU_MUON,            kind=LEPTON),
     "pion0"           => (charge= 0.0, mass=M_PION_0,          spin=0.0, moment=0.0,                kind=HADRON),
     "pion+"           => (charge= 1.0, mass=M_PION_CHARGED,    spin=0.0, moment=0.0,                kind=HADRON),
     "pion-"           => (charge=-1.0, mass=M_PION_CHARGED,    spin=0.0, moment=0.0,                kind=HADRON),
-    "deuteron"        => (charge= 1.0, mass=M_DEUTERON,        spin=1.0, moment=MU_DEUTERON,        kind=HADRON),
-    "anti-deuteron"   => (charge=-1.0, mass=M_DEUTERON,        spin=1.0, moment=MU_DEUTERON,        kind=HADRON),
     "photon"          => (charge= 0.0, mass=0.0,               spin=1.0, moment=0.0,                kind=PHOTON),
 )
 
