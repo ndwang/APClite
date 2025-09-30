@@ -137,3 +137,6 @@ const EV_PER_AMU = 931.49410242e6
 
 # Joules per eV
 const J_PER_EV = 1.602176634e-19
+
+# kg per MeV/c²
+const KG_PER_MEV_C2 = EV_PER_AMU * KG_PER_AMU / (1e6 * C_LIGHT^2)

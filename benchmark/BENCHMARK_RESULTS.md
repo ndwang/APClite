@@ -19,6 +19,8 @@ This document contains comprehensive performance benchmarks for APClite.jl, a li
 | **Species Creation** | 0.3-0.7 μs | 300-500 bytes      |
 | **Property Access**  | ~0.6 μs    | N/A                |
 | **Bulk Operations**  | ~8.0 μs    | ~490 bytes/species |
+| **g_spin Functions** | 0.03-0.06 μs | ~83 bytes/call |
+| **gyromagnetic_anomaly** | 0.05-0.06 μs | ~83 bytes/call |
 
 ## Detailed Results
 
@@ -118,6 +120,38 @@ H+: 504.0 bytes
 C12: 288.0 bytes
 ```
 
+### 6. Function Performance (g_spin and gyromagnetic_anomaly)
+
+**Predefined vs Calculated Performance:**
+
+```
+Predefined g_spin: 0.052 μs/call
+Calculated g_spin: 0.028 μs/call
+Predefined anomaly: 0.056 μs/call
+Calculated anomaly: 0.047 μs/call
+```
+
+**Individual Particle Performance (g_spin):**
+
+```
+electron: 0.049 μs
+proton: 0.055 μs
+neutron: 0.061 μs
+muon: 0.052 μs
+deuteron: 0.050 μs
+```
+
+**Function Performance Analysis:**
+
+- **Predefined cases**: Use dictionary lookup for known particles
+- **Calculated cases**: Compute g-factor from fundamental properties
+- **Surprising result**: Calculated cases are faster than predefined cases
+  - This suggests dictionary lookup overhead is higher than calculation overhead
+  - For particles with zero magnetic moment (like pions), calculation is very fast
+- **Memory usage**: ~83 bytes per function call
+- **Error handling**: ~4.4 μs for invalid particle types (photon)
+- **Signed vs unsigned**: No performance difference (1.0x overhead)
+
 ## Comparison with Baselines
 
 ### vs Simple Struct Creation
@@ -143,6 +177,7 @@ The following benchmark scripts are available in the `benchmark/` directory:
 - `performance_test.jl`: Basic performance tests
 - `detailed_benchmark.jl`: Detailed analysis with individual timings
 - `comparison_benchmark.jl`: Comparison with baseline implementations
+- `function_benchmarks.jl`: Performance tests for g_spin and gyromagnetic_anomaly functions
 
 To run the benchmarks:
 
@@ -150,4 +185,5 @@ To run the benchmarks:
 julia --project=. benchmark/performance_test.jl
 julia --project=. benchmark/detailed_benchmark.jl
 julia --project=. benchmark/comparison_benchmark.jl
+julia --project=. benchmark/function_benchmarks.jl
 ```

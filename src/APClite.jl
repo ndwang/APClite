@@ -19,6 +19,7 @@ include("types.jl")
 include("constants.jl")
 include("constructors.jl")
 include("species_data.jl")
+include("functions.jl")
 
 # Export main types and functions
 export Species
@@ -41,5 +42,8 @@ export G_ELECTRON, G_PROTON, G_NEUTRON, G_MUON, G_DEUTERON, G_HELION, G_TRITON
 
 # Unit conversions
 export KG_PER_AMU, EV_PER_AMU, J_PER_EV
+
+# Functions
+export g_spin, gyromagnetic_anomaly
 
 end # module

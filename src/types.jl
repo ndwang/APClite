@@ -21,6 +21,7 @@ A struct representing a particle or atom with its physical properties.
 - `mass::Float64`: Mass in MeV/c²
 - `spin::Float64`: Spin in units of ħ
 - `moment::Float64`: Magnetic moment in J/T
+- `g_factor::Float64`: g-factor for the particle
 - `iso::Float64`: Mass number for isotopes (0 for non-atomic particles)
 - `kind::Kind`: Type of particle (ATOM, HADRON, LEPTON, PHOTON, NULL)
 """
@@ -30,12 +31,13 @@ struct Species
     mass::Float64
     spin::Float64
     moment::Float64
+    g_factor::Float64
     iso::Float64
     kind::Kind
 end
 
 # Default constructor for null species
-Species() = Species("Null", 0.0, 0.0, 0.0, 0.0, 0.0, NULL)
+Species() = Species("Null", 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, NULL)
 
 """
     nameof(species::Species; basename::Bool=false) -> String
@@ -99,6 +101,7 @@ function Base.show(io::IO, ::MIME"text/plain", species::Species)
         println(io, "  Mass: $(species.mass) MeV/c²")
         println(io, "  Spin: $(species.spin) ħ")
         println(io, "  Magnetic moment: $(species.moment) J/T")
+        println(io, "  g-factor: $(species.g_factor)")
         if species.iso > 0
             println(io, "  Mass number: $(Int(species.iso))")
         end

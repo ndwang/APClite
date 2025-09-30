@@ -49,6 +49,7 @@ anti_p = Species("anti-proton")
 e.mass           # 0.51099895069 [MeV/c²]
 p.charge         # 1.0 [e]
 e.spin           # 0.5 [ħ]
+e.g_factor       # g-factor (dimensionless)
 ```
 
 ## Supported Species
@@ -132,6 +133,7 @@ All constants are available as module-level constants, grouped by type:
   - `species.charge` (units of e)
   - `species.spin` (ħ)
   - `species.moment` (J/T)
+  - `species.g_factor` (dimensionless)
   - `species.iso` (mass number)
   - `species.kind` (ATOM, HADRON, LEPTON, PHOTON, NULL)
   - `species.name` or `nameof(species)` for isotope and charge information
@@ -167,8 +169,8 @@ println(proton)
 using APClite
 
 # 1) Direct construction (no registry entry needed)
-#    name, charge [e], mass [MeV/c^2], spin [ħ], moment [J/T], iso, kind
-custom = Species("my-hadron", 1.0, 2500.0, 0.5, 0.0, 0.0, HADRON)
+#    name, charge [e], mass [MeV/c^2], spin [ħ], moment [J/T], g_factor, iso, kind
+custom = Species("my-hadron", 1.0, 2500.0, 0.5, 0.0, 2.0, 0.0, HADRON)
 println(custom)
 
 # 2) Register a custom subatomic species for name-based construction

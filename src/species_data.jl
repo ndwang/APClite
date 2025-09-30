@@ -4,6 +4,17 @@ Species data for subatomic particles and common atoms
 This module contains dictionaries with particle data using the latest CODATA 2022 values.
 """
 
+# Dictionary mapping particle names to their g-factors
+const G_FACTOR_MAP = Dict{String,Float64}(
+    "electron"  => G_ELECTRON,
+    "proton"    => G_PROTON,
+    "neutron"   => G_NEUTRON,
+    "muon"      => G_MUON,
+    "deuteron"  => G_DEUTERON,
+    "helion"    => G_HELION,
+    "triton"    => G_TRITON,
+)
+
 # Subatomic particles dictionary
 # Masses are in MeV/c²
 # Charges in units of e
