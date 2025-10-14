@@ -7,6 +7,7 @@ This module contains dictionaries with particle data using the latest CODATA 202
 # Dictionary mapping particle names to their g-factors
 const G_FACTOR_MAP = Dict{String,Float64}(
     "electron"  => -G_ELECTRON,
+    "positron"  => -G_ELECTRON,
     "proton"    => G_PROTON,
     "neutron"   => G_NEUTRON,
     "muon"      => -G_MUON,
@@ -16,7 +17,7 @@ const G_FACTOR_MAP = Dict{String,Float64}(
 )
 
 # Subatomic particles dictionary
-# Masses are in MeV/c²
+# Masses are in eV/c²
 # Charges in units of e
 # Spins in units of ħ
 # Magnetic moments in J/T

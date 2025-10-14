@@ -5,8 +5,8 @@ using APClite
     @testset "Constants" begin
         @test C_LIGHT ≈ 2.99792458e8
         @test H_PLANCK ≈ 6.62607015e-34
-        @test M_ELECTRON ≈ 0.51099895069
-        @test M_PROTON ≈ 938.27208816
+        @test M_ELECTRON ≈ 0.51099895069e6
+        @test M_PROTON ≈ 938.27208816e6
         @test FINE_STRUCTURE ≈ 0.0072973525643
     end
     
@@ -48,7 +48,8 @@ using APClite
         
         # Hydrogen ion
         h_plus = Species("H+")
-        @test nameof(h_plus, basename=true) == "H+"
+        @test nameof(h_plus, basename=true) == "H"
+        @test nameof(h_plus, basename=false) == "H+1"
         @test h_plus.charge == 1.0
         
         # Carbon
@@ -58,7 +59,8 @@ using APClite
         
         # Carbon isotope
         c12 = Species("C12")
-        @test nameof(c12, basename=true) == "C12"
+        @test nameof(c12, basename=true) == "C"
+        @test nameof(c12, basename=false) == "#12C"
         @test c12.iso == 12
     end
     
